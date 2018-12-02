@@ -1,20 +1,25 @@
 import React, { Component } from "react";
 import "./App.css";
-import store from "./store";
 import {
   setActiveSession as setActiveSessionAC,
   updateCounter
 } from "./actions";
+import { connect } from "react-redux";
 
 class App extends Component {
   render() {
-    const { days, hours, minutes, seconds, activeSession } = store.getState();
+    const days = this.props.days;
+    const hours = this.props.hours;
+    const minutes = this.props.minutes;
+    const seconds = this.props.seconds;
+    const activeSession = this.props.activeSession;
+
     const setActiveSession = e => {
-      store.dispatch(setActiveSessionAC(e.target.value));
+      this.props.setActiveSessionAC(e.target.value);
     };
     const handleCounter = e => {
       const type = e.target.dataset.type;
-      store.dispatch(updateCounter(type, activeSession));
+      this.props.updateCounter(type, activeSession);
     };
     return (
       <div className="App">
@@ -98,4 +103,16 @@ class App extends Component {
   }
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    days: state.days,
+    hours: state.hours,
+    minutes: state.minutes,
+    seconds: state.seconds,
+    activeSession: state.activeSession
+  };
+}
+export default connect(
+  mapStateToProps,
+  { setActiveSessionAC, updateCounter }
+)(App);
