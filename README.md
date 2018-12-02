@@ -1,2 +1,1 @@
-# CounterApp
-Created with CodeSandbox
+## Counter App in React Redux
