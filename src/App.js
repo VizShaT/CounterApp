@@ -1,21 +1,20 @@
 import React, { Component } from "react";
 import "./App.css";
+import store from "./store";
+import {
+  setActiveSession as setActiveSessionAC,
+  updateCounter
+} from "./actions";
 
 class App extends Component {
-  state = {
-    days: 11,
-    hours: 31,
-    mintues: 27,
-    seconds: 11,
-    activeSession: "DAYS"
-  };
-
   render() {
-    const { days, hours, mintues, seconds, activeSession } = this.state;
+    const { days, hours, minutes, seconds, activeSession } = store.getState();
     const setActiveSession = e => {
-      this.setState({
-        activeSession: e.target.value
-      });
+      store.dispatch(setActiveSessionAC(e.target.value));
+    };
+    const handleCounter = e => {
+      const type = e.target.dataset.type;
+      store.dispatch(updateCounter(type, activeSession));
     };
     return (
       <div className="App">
@@ -31,12 +30,12 @@ class App extends Component {
               <span className="Counter__text--grey">ACTIVE SESSION : </span>
               <select
                 className="Counter__text--grey"
+                onChange={setActiveSession}
                 value={activeSession}
-                onClick={setActiveSession}
               >
                 <option>DAYS</option>
                 <option>HOURS</option>
-                <option>MINTUES</option>
+                <option>MINUTES</option>
                 <option>SECONDS</option>
               </select>
             </div>
@@ -61,9 +60,9 @@ class App extends Component {
 
               <div>
                 <span className="App__text--white Counter__text--large">
-                  {mintues}
+                  {minutes}
                 </span>
-                <span className="Counter__text--grey">MINTUES</span>
+                <span className="Counter__text--grey">MINUTES</span>
               </div>
 
               <div className="Counter__separator">:</div>
@@ -78,10 +77,18 @@ class App extends Component {
           </main>
 
           <div className="App__buttons">
-            <button className="App__text--white" data-type="INCREASE_COUNTER">
+            <button
+              className="App__text--white"
+              data-type="INCREASE_COUNTER"
+              onClick={handleCounter}
+            >
               INCREASE
             </button>
-            <button className="App__text--white" data-type="DECREASE_COUNTER">
+            <button
+              className="App__text--white"
+              data-type="DECREASE_COUNTER"
+              onClick={handleCounter}
+            >
               DECREASE
             </button>
           </div>
